@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TRICK OR TREAT! · THE MESSAGE WALL</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Playfair+Display:wght@600;700;800&display=swap');
+:root{--night:#171321;--panel:#211b30;--muted:#b7a9c8;--gold:#f3c77a;--purple:#a78bfa;--cream:#fff1d2}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:#f8f0ff;font-family:'Gowun Dodum',sans-serif;background:radial-gradient(ellipse at 50% -20%,#49305d 0%,#211a31 42%,#12101a 100%);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;background-image:radial-gradient(#fff 1px,transparent 1px),radial-gradient(#d8b7ff 1px,transparent 1px);background-size:91px 91px,137px 137px;background-position:0 0,40px 60px}
+.shell{width:min(1480px,calc(100% - 40px));margin:auto;padding:34px 0 48px;position:relative}
+header{text-align:center;margin-bottom:25px}
+.eyebrow{color:#d7b9f2;letter-spacing:.28em;font-size:11px}
+h1{font:800 clamp(34px,6vw,64px)/1.05 'Playfair Display',serif;letter-spacing:.025em;margin:12px 0 7px;color:#ffe5b3;text-shadow:0 4px 24px #0008}
+.subtitle{color:#c9b9d7;font-size:14px}
+.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.stat{border:1px solid #806a9566;background:#211a2caa;border-radius:999px;padding:7px 13px;color:#e7d9f2;font-size:12px}
+.stat b{color:#ffd48b;margin-right:4px}
+.instructions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 10px;color:#d6c7e3;font-size:13px}
+.instructions strong{color:#ffe0a4}
+.wall-frame{padding:12px;border:1px solid #a88ab766;border-radius:19px;background:linear-gradient(145deg,#6e4c7955,#1a1525 45%,#4d334f55);box-shadow:0 24px 65px #0008}
+.wall{height: min(72vh, 760px); min-height:640px;position:relative;overflow:hidden;border:8px solid #4c3042;border-radius:11px;background-color:#79533f;background-image:linear-gradient(90deg,#0002 1px,transparent 1px),linear-gradient(#0002 1px,transparent 1px),repeating-linear-gradient(2deg,#0000 0 9px,#281c1a22 10px 11px),linear-gradient(135deg,#9a6a4c,#684331 48%,#8a5a42);background-size:42px 42px,42px 42px,100% 100%,100% 100%;box-shadow:inset 0 0 55px #1d0e13aa;cursor:crosshair}
+.wall:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,#1b0d18aa 100%)}
+.wall-label{position:absolute;top:14px;left:18px;color:#ffe5b8aa;font:700 12px 'Playfair Display',serif;letter-spacing:.18em;z-index:1;pointer-events:none}
+.decor{position:absolute;z-index:1;pointer-events:none;filter:drop-shadow(0 3px 4px #0008);font-size:27px}
+.note{position:absolute;appearance:none;-webkit-appearance:none;text-align:left;line-height:normal;white-space:normal;width:clamp(126px,12vw,164px);aspect-ratio:1/1;min-height:0;padding:18px 13px 13px;border-radius:2px;color:#49394a;box-shadow:3px 8px 12px #170e19a8;transform:rotate(var(--rot));cursor:pointer;z-index:2;transition:transform .18s,box-shadow .18s;overflow:hidden;overflow-wrap:anywhere;display:flex;flex-direction:column;gap:7px}
+.note:hover{z-index:5;transform:rotate(0deg) scale(1.07);box-shadow:5px 14px 22px #130a18bb}
+.note:before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:42px;height:10px;background:#fff9;box-shadow:0 1px 2px #0002}
+.note-text{font-size:13px;line-height:1.5;white-space:pre-wrap;max-height:calc(100% - 34px);overflow:hidden;}
+.note-author{display:block;align-self:flex-end;margin-top:auto;text-align:right;font-size:11px;font-weight:700;letter-spacing:.01em;color:#49394a;background:#ffffff82;border:1px solid #49394a22;border-radius:2px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 7px;line-height:1.25;}
+.note-emoji{position:absolute;right:8px;top:9px;font-size:13px;opacity:.75}
+.empty{position:absolute;inset:0;display:grid;place-content:center;text-align:center;color:#ffe9c4aa;pointer-events:none;z-index:1}
+.empty b{font:700 22px 'Playfair Display',serif;color:#ffdfb2;margin-bottom:7px}
+.empty span{font-size:12px}
+.toolbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px 0 8px}
+button{border:0;border-radius:999px;padding:12px 19px;font:inherit;font-size:13px;cursor:pointer;transition:.18s}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.primary{background:linear-gradient(135deg,#f6d28e,#d89a61);color:#382638;font-weight:bold;box-shadow:0 7px 20px #0004}
+.secondary{background:#30263d;border:1px solid #806b91;color:#f1e4fa}
+.footer{text-align:center;color:#9e8eae;font-size:11px;margin-top:22px;line-height:1.8}
+.modal-backdrop{position:fixed;inset:0;background:#090710cc;display:none;align-items:center;justify-content:center;padding:18px;z-index:20;backdrop-filter:blur(7px)}
+.modal-backdrop.open{display:flex}
+.modal{width:min(440px,100%);background:#241c31;border:1px solid #8c70a5;border-radius:20px;padding:23px;box-shadow:0 25px 80px #000a}
+.modal h2{font:700 25px 'Playfair Display',serif;color:#ffe0a8;margin:0 0 6px}
+.modal p{color:#bcaecb;font-size:12px;margin:0 0 18px}
+label{display:block;font-size:12px;color:#e8d9f2;margin:13px 0 7px}
+input,textarea{width:100%;border:1px solid #655273;background:#171321;color:#fff4ff;border-radius:10px;padding:11px 12px;font:14px 'Gowun Dodum',sans-serif;outline:none}
+input:focus,textarea:focus{border-color:#c5a1f0;box-shadow:0 0 0 3px #a78bfa22}
+textarea{min-height:105px;resize:vertical}
+.palette{display:flex;gap:9px;flex-wrap:wrap}
+.swatch{width:29px;height:29px;border-radius:50%;border:2px solid #ffffff77;cursor:pointer;box-shadow:0 2px 5px #0005}
+.swatch.selected{outline:2px solid #fff;outline-offset:3px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.counter{color:#a99ab6;text-align:right;font-size:11px;margin-top:5px}
+.detail-note{min-height:190px;padding:27px 22px 20px;border-radius:2px;color:#49394a;box-shadow:0 12px 30px #0007;transform:rotate(-1deg);display:flex;flex-direction:column;gap:16px}
+.detail-note .content{font-size:17px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.detail-note .byline{text-align:right;font-size:12px;color:#6e596d;margin-top:auto}
+.notice{font-size:11px;color:#b9a9c8;line-height:1.7;margin-top:12px}
+.music-player{position:fixed;right:22px;bottom:22px;z-index:30;display:flex;align-items:center;gap:11px;padding:11px 14px;background:linear-gradient(145deg,#30243dF2,#1a1525F2);border:1px solid #a88ab777;border-radius:18px;box-shadow:0 12px 35px #0008;backdrop-filter:blur(12px);color:#f8efff;max-width:calc(100vw - 28px)}
+.music-toggle{width:39px;height:39px;flex:0 0 39px;padding:0;border-radius:50%;background:linear-gradient(135deg,#f6d28e,#d89a61);color:#382638;font-size:16px;font-weight:bold}
+.music-meta{min-width:0;display:flex;flex-direction:column;gap:2px}.music-title{font-size:12px;color:#ffe2ae;white-space:nowrap}.music-state{font-size:10px;color:#bbaec9}.volume-wrap{display:flex;align-items:center;gap:6px;color:#cdbbdc}.volume-wrap input{width:72px;height:4px;padding:0;accent-color:#e8bd79;cursor:pointer;border:0;background:transparent}
+@media(max-width:650px){.music-player{right:12px;bottom:12px;padding:9px 11px;gap:8px}.volume-wrap input{width:54px}.music-title{font-size:11px}}
+@media(max-width:650px){.shell{width:calc(100% - 20px);padding-top:25px}.wall-frame{padding:7px}.wall{height:680px;min-height:680px;border-width:5px}.instructions{font-size:11px}.note{width:clamp(104px,28vw,132px);aspect-ratio:1/1;min-height:0;padding:16px 9px 9px;border-radius:2px}.note-text{font-size:11px;line-height:1.45}.note-author{font-size:10px;padding:4px 5px}.toolbar button{padding:11px 15px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+  <div class="eyebrow">✦ OCTOBER 31 · A NIGHT FOR LITTLE SECRETS ✦</div>
+  <h1>TRICK OR TREAT!</h1>
+  <div class="subtitle">THE MESSAGE WALL</div>
+  <div class="stats">
+    <div class="stat"><b id="noteCount">0</b> NOTES ON THE WALL</div>
+    <div class="stat"><b>∞</b> LITTLE HALLOWEEN WISHES</div>
+  </div>
+</header>
+<div class="instructions"><span><strong>벽을 톡 눌러</strong> 그 자리에 메시지를 붙여보세요.</span><span>✦ CLICK TO PLACE ✦</span></div>
+<div class="wall-frame">
+  <div class="wall" id="wall" aria-label="포스트잇을 붙일 수 있는 벽">
+    <div class="wall-label">THE LITTLE MESSAGE WALL</div>
+    <div class="decor" style="left:3%;top:9%">🦇</div>
+    <div class="decor" style="right:4%;top:8%">🎃</div>
+    <div class="decor" style="left:3%;bottom:7%">🕯️</div>
+    <div class="decor" style="right:4%;bottom:7%">👻</div>
+    <div class="empty" id="empty"><b>Leave a little note...</b><span>이 벽의 빈 곳을 클릭해 첫 번째 메시지를 남겨주세요.</span></div>
+    <div id="notes"></div>
+  </div>
+</div>
+<div class="toolbar">
+  <button class="primary" id="newNote">✦ 포스트잇 붙이기</button>
+  <button class="secondary" id="randomNote">랜덤 메시지 발견</button>
+  <button class="secondary" id="clearDemo">내 브라우저 메모 초기화</button>
+</div>
+<div class="footer">A SMALL NOTE CAN MAKE SOMEONE'S NIGHT. <br>이 프로토타입의 메시지는 현재 이 브라우저에만 저장됩니다.</div>
+</div>
+
+<div class="modal-backdrop" id="composeBackdrop">
+  <div class="modal">
+    <h2>Leave a little note</h2>
+    <p>오늘 밤, 이 벽에 당신의 흔적을 남겨주세요.</p>
+    <label for="nickname">닉네임</label>
+    <input id="nickname" maxlength="15" placeholder="익명" value="">
+    <label for="message">메시지</label>
+    <textarea id="message" maxlength="200" placeholder="누군가에게 전하고 싶은 말을 적어보세요."></textarea>
+    <div class="counter"><span id="charCount">0</span> / 200</div>
+    <label>포스트잇 색상</label>
+    <div class="palette" id="palette"></div>
+    <div class="modal-actions">
+      <button class="secondary" id="cancelCompose">취소</button>
+      <button class="primary" id="saveNote">벽에 붙이기 ✦</button>
+    </div>
+    <div class="notice">공개 사이트로 연결할 때는 메시지 신고 및 관리자 삭제 기능이 추가됩니다.</div>
+  </div>
+</div>
+<div class="modal-backdrop" id="detailBackdrop">
+  <div class="modal">
+    <h2>A little message</h2>
+    <p id="detailDate"></p>
+    <div class="detail-note" id="detailNote"></div>
+    <div class="modal-actions"><button class="secondary" id="closeDetail">닫기</button></div>
+  </div>
+</div>
+<div class="music-player" aria-label="배경 음악 플레이어">
+  <button class="music-toggle" id="musicToggle" type="button" aria-label="음악 재생" title="음악 재생">▶</button>
+  <div class="music-meta"><span class="music-title">おばけ会議</span><span class="music-state" id="musicState">BGM 꺼짐 · 눌러서 재생</span></div>
+  <label class="volume-wrap" title="음량 조절"><span aria-hidden="true">♫</span><input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.45" aria-label="음량 조절"></label>
+</div>
+<audio id="backgroundMusic" src="obake-kaigi.mp3" preload="metadata" loop></audio>
+<script>
+const STORAGE_KEY='trick-or-treat-message-wall-v1';
+const colors=['#fff0bd','#e7d9ff','#ffd9e9','#dcebd1','#d7eafa','#ffe5a8','#f3d5c4'];
+const wall=document.getElementById('wall'), notesEl=document.getElementById('notes');
+let notes=[], selectedColor=colors[0], pendingPosition={x:50,y:50};
+const $=id=>document.getElementById(id);
+function load(){try{notes=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{notes=[]}render()}
+function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(notes));render()}
+function render(){
+  notesEl.innerHTML='';
+  notes.forEach(note=>{
+    const el=document.createElement('button');
+    el.type='button';el.className='note';el.style.left=note.x+'%';el.style.top=note.y+'%';el.style.background=note.color;el.style.setProperty('--rot',note.rotation+'deg');
+    el.setAttribute('aria-label',`${note.nickname}의 포스트잇: ${note.message}`);
+    const emoji=document.createElement('span');emoji.className='note-emoji';emoji.textContent=note.emoji||'✦';
+    const text=document.createElement('div');text.className='note-text';text.textContent=note.message;
+    const author=document.createElement('div');author.className='note-author';author.textContent='- '+(note.nickname||'익명');
+    el.append(emoji,text,author);el.addEventListener('click',e=>{e.stopPropagation();showDetail(note)});
+    notesEl.append(el);
+  });
+  $('noteCount').textContent=notes.length;
+  $('empty').style.display=notes.length?'none':'grid';
+}
+function openCompose(x=50,y=50){
+  pendingPosition={x,y};$('nickname').value='';$('message').value='';$('charCount').textContent='0';selectedColor=colors[0];renderPalette();$('composeBackdrop').classList.add('open');$('message').focus();
+}
+function renderPalette(){
+  const p=$('palette');p.innerHTML='';
+  colors.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='swatch'+(selectedColor===c?' selected':'');b.style.background=c;b.setAttribute('aria-label','색상 선택');b.addEventListener('click',()=>{selectedColor=c;renderPalette()});p.append(b)});
+}
+function showDetail(note){
+  const box=$('detailNote');box.style.background=note.color;box.innerHTML='';
+  const content=document.createElement('div');content.className='content';content.textContent=note.message;
+  const byline=document.createElement('div');byline.className='byline';byline.textContent='- '+(note.nickname||'익명');
+  box.append(content,byline);
+  $('detailDate').textContent=new Date(note.createdAt).toLocaleString('ko-KR');
+  $('detailBackdrop').classList.add('open');
+}
+function close(id){$(id).classList.remove('open')}
+wall.addEventListener('click',e=>{
+  if(e.target.closest('.note')||e.target.closest('.decor'))return;
+  const rect=wall.getBoundingClientRect();
+  const noteW = Math.min(164, Math.max(104, wall.clientWidth * (window.innerWidth <= 650 ? 0.28 : 0.12)));
+  const noteH = noteW;
+  const clickX = e.clientX - rect.left;
+  const clickY = e.clientY - rect.top;
+  const x = Math.max(1, Math.min(99 - (noteW / rect.width * 100), (clickX - noteW / 2) / rect.width * 100));
+  const y = Math.max(5, Math.min(99 - (noteH / rect.height * 100), (clickY - noteH / 2) / rect.height * 100));
+  openCompose(x,y);
+});
+$('newNote').addEventListener('click',()=>openCompose(50,45));
+$('cancelCompose').addEventListener('click',()=>close('composeBackdrop'));
+$('saveNote').addEventListener('click',()=>{
+  const message=$('message').value.trim();
+  if(!message){$('message').focus();return}
+  const nickname=$('nickname').value.trim().slice(0,15)||'익명';
+  notes.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),nickname,message:message.slice(0,200),color:selectedColor,x:pendingPosition.x,y:pendingPosition.y,rotation:(Math.random()*5-2.5).toFixed(1),emoji:['✦','🎃','👻','★','🍬'][Math.floor(Math.random()*5)],createdAt:new Date().toISOString()});
+  persist();close('composeBackdrop');
+});
+$('message').addEventListener('input',()=> $('charCount').textContent=$('message').value.length);
+$('randomNote').addEventListener('click',()=>{
+  if(!notes.length){alert('아직 포스트잇이 없어요. 첫 번째 메시지를 남겨보세요!');return}
+  showDetail(notes[Math.floor(Math.random()*notes.length)]);
+});
+$('clearDemo').addEventListener('click',()=>{
+  if(confirm('이 브라우저에 저장된 포스트잇을 모두 지울까요?')){notes=[];persist()}
+});
+$('closeDetail').addEventListener('click',()=>close('detailBackdrop'));
+const bgm=$('backgroundMusic'), musicToggle=$('musicToggle'), musicState=$('musicState'), musicVolume=$('musicVolume');
+// 브라우저 자동 재생 정책에 따라 방문자가 재생 버튼을 눌렀을 때 음악을 시작합니다.
+try{const savedVolume=localStorage.getItem('trick-or-treat-bgm-volume');if(savedVolume!==null)musicVolume.value=savedVolume}catch{}
+bgm.volume=Number(musicVolume.value);
+function updateMusicUI(){const playing=!bgm.paused;musicToggle.textContent=playing?'Ⅱ':'▶';musicToggle.setAttribute('aria-label',playing?'음악 일시정지':'음악 재생');musicToggle.title=playing?'음악 일시정지':'음악 재생';musicState.textContent=playing?'BGM 재생 중':'BGM 꺼짐 · 눌러서 재생'}
+musicToggle.addEventListener('click',async()=>{if(bgm.paused){try{await bgm.play()}catch{musicState.textContent='재생할 수 없어요 · 파일 위치를 확인해 주세요'}}else{bgm.pause()}updateMusicUI()});
+bgm.addEventListener('play',updateMusicUI);bgm.addEventListener('pause',updateMusicUI);
+musicVolume.addEventListener('input',()=>{bgm.volume=Number(musicVolume.value);try{localStorage.setItem('trick-or-treat-bgm-volume',musicVolume.value)}catch{}});
+['composeBackdrop','detailBackdrop'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.id===id)close(id)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){close('composeBackdrop');close('detailBackdrop')}});
+load();
+</script>
+</body>
+</html>
